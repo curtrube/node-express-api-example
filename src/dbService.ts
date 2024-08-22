@@ -13,9 +13,9 @@ class DbService {
         try {
             client = await this.dbInstance.connect();
             const res = await client.query<T>(sql, values);
-            return res.rows
+            return res.rows;
         } catch (err) {
-            console.error(`Database query failed: ${err}`)
+            console.error(`Database query failed: ${err}`);
             throw err;
         } finally {
             if (client) {

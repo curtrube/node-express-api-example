@@ -3,10 +3,8 @@ import { Express, Request, Response } from "express";
 import DbService from "./dbService";
 import { QueryResultRow } from 'pg';
 
-type UUID = string;
-
 interface Transaction extends QueryResultRow {
-    id: UUID,
+    id: number,
     merchant: string,
     amount: number,
     date: string
@@ -14,6 +12,8 @@ interface Transaction extends QueryResultRow {
 
 const app: Express = express();
 const port: number = 3000;
+
+app.use(express.json());
 
 const dbConfig = {
     host: '127.0.0.1',
@@ -26,7 +26,8 @@ const dbService = new DbService(dbConfig)
 
 app.get('/', async (req: Request, res: Response) => {
     try {
-        const transactions: Transaction[] = await dbService.query<Transaction>("SELECT * FROM transactions;")
+        const sql = 'SELECT * FROM transactions;'
+        const transactions: Transaction[] = await dbService.query<Transaction>(sql)
         return res.status(200).json({transactions})
     } catch (err) {
         console.error(`Error fetching transactions: ${err}`)
@@ -34,6 +35,25 @@ app.get('/', async (req: Request, res: Response) => {
     }
 })
 
+app.post('/', async (req: Request<{}, {}, Transaction>, res: Response) => {
+    const transaction = req.body;
+    const requiredKeys = ['merchant', 'amount', 'date']
+    for (let key of requiredKeys) {
+        if (!Object.keys(transaction).includes(key)) {
+            console.error(`Create transaction request missing key: ${key}`)
+            return res.status(400).json(`Request missing prop: ${key}`);
+        }
+    }
+    const sql = `
+        INSERT INTO transactions(merchant, amount, date)
+        VALUES ($1, $2, $3) 
+        RETURNING id, merchant, amount, date;
+    `
+    const values = [transaction.merchant, transaction.amount, transaction.date]
+    const transactions: Transaction[] = await dbService.query<Transaction>(sql, values)
+    return res.status(201).json(transactions[0])
+})
+
 app.listen(port, () => {
-    console.log("Listening on port", port);
+    console.log(`App listening on port ${port}`);
 })
