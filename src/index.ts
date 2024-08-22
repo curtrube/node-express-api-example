@@ -1,11 +1,11 @@
 import express from "express";
 import { Express, Request, Response } from "express";
-import pg, { PoolClient } from 'pg';
-import { Client, Pool } from 'pg';
+import DbService from "./dbService";
+import { QueryResultRow } from 'pg';
 
 type UUID = string;
 
-interface Transaction {
+interface Transaction extends QueryResultRow {
     id: UUID,
     merchant: string,
     amount: number,
@@ -15,46 +15,23 @@ interface Transaction {
 const app: Express = express();
 const port: number = 3000;
 
-async function getAllTransactions(): Promise<Transaction[]> {
-    const pool: Pool = new pg.Pool({
-        host: '127.0.0.1',
-        user: 'postgres',
-        password: 'postgres',
-        port: 5432,
-        database: 'test',
-        max: 5,
-    });
-    const client: PoolClient = await pool.connect();
+const dbConfig = {
+    host: '127.0.0.1',
+    user: 'postgres',
+    password: 'postgres',
+    database: 'test',
+};
+
+const dbService = new DbService(dbConfig)
+
+app.get('/', async (req: Request, res: Response) => {
     try {
-        const res = await client.query<Transaction>('select * from transactions;')
-        const transactions: Transaction[] = res.rows;
-        return transactions;
+        const transactions: Transaction[] = await dbService.query<Transaction>("SELECT * FROM transactions;")
+        return res.status(200).json({transactions})
+    } catch (err) {
+        console.error(`Error fetching transactions: ${err}`)
+        return res.sendStatus(404)
     }
-    catch (err) {
-        throw(err)
-    } finally {
-        console.log('releasing client')
-        client.release();
-    }
-}
-
-async function getTransactions() {
-    const transactions = await getAllTransactions()
-    for (const transaction of transactions) {
-        console.log(transaction)
-    }
-}
-
-getTransactions()
-
-
-app.get('/', (req: Request, res: Response) => {
-
-    return res.status(200).json(
-        {
-        body: 'Hello World',
-        status: 200
-    });
 })
 
 app.listen(port, () => {
