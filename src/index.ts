@@ -1,6 +1,7 @@
 import express from 'express';
 import type { Express, Request, Response } from 'express';
 import DbService, { dbConfig } from './dbService';
+import api from './api/routes/index';
 import type { QueryResultRow } from 'pg';
 import dotenv from 'dotenv';
 
@@ -17,6 +18,8 @@ const app: Express = express();
 const port: number = 3000;
 
 app.use(express.json());
+
+app.use(api);
 
 const dbService = new DbService(dbConfig);
 
