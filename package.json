@@ -1,8 +1,7 @@
 {
-  "name": "node-express-api-template",
+  "name": "node-express-api-example",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node dist/index.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/index.ts",

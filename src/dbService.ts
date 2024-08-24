@@ -1,5 +1,5 @@
 import pg from 'pg';
-import { ClientConfig, PoolClient, Pool, QueryResultRow } from 'pg';
+import type { ClientConfig, PoolClient, Pool, QueryResultRow } from 'pg';
 
 export const dbConfig: ClientConfig = {
   host: process.env.PGHOST || 'localhost',
@@ -13,7 +13,7 @@ class DbService {
   private dbInstance: Pool;
 
   constructor(dbConfig: pg.PoolConfig) {
-    this.dbInstance = new Pool(dbConfig);
+    this.dbInstance = new pg.Pool(dbConfig);
   }
 
   async query<T extends QueryResultRow>(sql: string, values?: any[]): Promise<T[]> {

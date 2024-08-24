@@ -1,7 +1,7 @@
 import express from 'express';
-import { Express, Request, Response } from 'express';
+import type { Express, Request, Response } from 'express';
 import DbService, { dbConfig } from './dbService';
-import { QueryResultRow } from 'pg';
+import type { QueryResultRow } from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -31,7 +31,7 @@ app.get('/', async (req: Request, res: Response) => {
   }
 });
 
-app.post('/', async (req: Request<{}, {}, Transaction>, res: Response) => {
+app.post('/', async (req: Request<Record<string, never>, Record<string, never>, Transaction>, res: Response) => {
   const transaction = req.body;
   const requiredKeys = ['merchant', 'amount', 'date'];
   for (let key of requiredKeys) {
