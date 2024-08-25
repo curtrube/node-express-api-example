@@ -37,7 +37,7 @@ app.get('/', async (req: Request, res: Response) => {
 app.post('/', async (req: Request<Record<string, never>, Record<string, never>, Transaction>, res: Response) => {
   const transaction = req.body;
   const requiredKeys = ['merchant', 'amount', 'date'];
-  for (let key of requiredKeys) {
+  for (const key of requiredKeys) {
     if (!Object.keys(transaction).includes(key)) {
       console.error(`Create transaction request missing key: ${key}`);
       return res.status(400).json(`Request missing prop: ${key}`);
