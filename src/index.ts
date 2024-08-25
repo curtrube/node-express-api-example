@@ -15,7 +15,7 @@ interface Transaction extends QueryResultRow {
 }
 
 const app: Express = express();
-const port: number = 3000;
+const port: number = Number(process.env.PORT) || 3000;
 
 app.use(express.json());
 
