@@ -8,7 +8,7 @@ class DbService {
     this.dbInstance = new pg.Pool();
   }
 
-  async query<T extends QueryResultRow>(sql: string, values?: string[]): Promise<T[]> {
+  async query<T extends QueryResultRow>(sql: string, values?: (string | number | boolean)[]): Promise<T[]> {
     let client: PoolClient | undefined;
     try {
       client = await this.dbInstance.connect();
