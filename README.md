@@ -1,5 +1,7 @@
 # node-express-api-example
 
+This is a demo api project using node.js, express, and typescript.
+
 ## Things to add
 
 - [x] eslint for linting and auto fixing

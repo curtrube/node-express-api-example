@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 
 const getHello = (req: Request, res: Response) => {
-  res.status(200).json('Hello Express');
+  res.status(200).json('Hello World');
 };
 
-const helloController = {
+const helloHandler = {
   getHello,
 };
 
-export default helloController;
+export default helloHandler;
