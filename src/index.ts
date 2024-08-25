@@ -1,6 +1,6 @@
 import express from 'express';
 import type { Express, Request, Response } from 'express';
-import DbService, { dbConfig } from './dbService';
+import DbService from './dbService';
 import api from './api/routes/index';
 import type { QueryResultRow } from 'pg';
 import dotenv from 'dotenv';
@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.use(api);
 
-const dbService = new DbService(dbConfig);
+const dbService = new DbService();
 
 app.get('/', async (req: Request, res: Response) => {
   try {
