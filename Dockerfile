@@ -1,4 +1,4 @@
-FROM node:20.17-bullseye-slim
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -20,4 +20,4 @@ COPY .env .env
 # Expose the port the app runs on
 EXPOSE 3000
 
-CMD ["node", "dist/index.js"]
+CMD ["npm", "run", "start"]
