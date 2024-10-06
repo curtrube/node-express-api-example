@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf dist docs node_modules tsconfig.tsbuildinfo",
+    "clean": "rm -rf dist coverage node_modules tsconfig.tsbuildinfo",
     "dev": "tsx ./src/main.ts",
     "docker": "npm run docker:build && npm run docker:run",
     "docker:build": "docker build -t node-express-api-example .",
@@ -34,6 +34,7 @@
     "@types/express": "^5.0.0",
     "@types/pg": "^8.11.10",
     "@types/supertest": "^6.0.2",
+    "@vitest/coverage-v8": "^2.1.2",
     "eslint": "^9.11.1",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.10.0",
